@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://your-backend-url-on-render.onrender.com/:path*"
+      "destination": "https://earthquake-backend-kjon.onrender.com/:path*"
     }
   ]
 }
