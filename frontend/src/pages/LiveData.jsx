@@ -1,347 +1,204 @@
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons';
-// import Chart from 'react-apexcharts';
-
-// const DataCard = ({ label, value, historicalData }) => {
-//   const [prevValue, setPrevValue] = useState(value);
-
-//   useEffect(() => {
-//     // Set the previous value whenever the value changes
-//     setPrevValue(value);
-//   }, [value]);
-
-//   const iconStyle = {
-//     fontSize: '3rem',
-//     transition: 'transform 0.5s ease',
-//     transform: value > prevValue ? 'rotate(0deg)' : 'rotate(180deg)',
-//   };
-
-//   return (
-//     <div className="w-52 mx-auto mt-4 bg-white border p-4 rounded-md shadow-md transition-transform transform scale-100 hover:scale-105">
-//       <div className="flex items-center justify-center mb-4 text-primary">
-//         <FontAwesomeIcon icon={faTachometerAlt} style={{ ...iconStyle, color: '#0492c2' }} />
-//       </div>
-//       <h3 className="text-lg font-semibold">{label} Value:</h3>
-//       <div className="flex items-center mt-2">
-//         <p className={`text-xl ${value > prevValue ? 'text-green-500' : 'text-red-500'}`}>
-//           {value}
-//         </p>
-//       </div>
-//       <div>{/* <p className="text-sm mt-2">Historical Data: {historicalData.join(', ')}</p> */}</div>
-//     </div>
-//   );
-// };
-
-// const LiveData = () => {
-//   const [xdata, setXData] = useState(0);
-//   const [ydata, setYData] = useState(0);
-//   const [zdata, setZData] = useState(0);
-
-//   // Historical data arrays
-//   const [historicalXData, setHistoricalXData] = useState([]);
-//   const [historicalYData, setHistoricalYData] = useState([]);
-//   const [historicalZData, setHistoricalZData] = useState([]);
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const response = await axios.get('http://localhost:5000/');
-//         const len=response.data.length;
-//         setXData(response.data[len-1].x);
-//         setYData(response.data[len-1].y);
-//         setZData(response.data[len-1].z);
-
-//         // Update historical data
-//         setHistoricalXData((prevData) => [...prevData, response.data[len-1].x]);
-//         setHistoricalYData((prevData) => [...prevData, response.data[len-1].y]);
-//         setHistoricalZData((prevData) => [...prevData, response.data[len-1].z]);
-
-//         setState((prevState) => ({
-//           ...prevState,
-//           series: [
-//             { name: "x-axes value", data: historicalXData },
-//             { name: "y-axes value", data: historicalYData },
-//             { name: "z-axes value", data: historicalZData },
-//           ],
-//         }));
-
-//         const threshold = 3;
-//         if (response.data[len-1].x > threshold || response.data[len-1].x < -threshold ||
-//           response.data[len-1].y> threshold || response.data[len-1].y< -threshold ||
-//           response.data[len-1].z> threshold || response.data[len-1].z < -threshold) {
-//           alert('Earthquake Detected! Stay Safe!');
-//         }
-        
-//       } catch (error) {
-//         console.error('Error fetching data:', error);
-//       }
-//     };
-
-//     fetchData();
-
-//     // Simulating live data updates every 5 ms
-//     const intervalId = setInterval(fetchData, 500);
-
-//     // Cleanup the interval when the component unmounts
-//     return () => clearInterval(intervalId);
-//   }, [historicalXData, historicalYData, historicalZData]);
-
-//   const [state, setState] = useState({
-//     options: {
-//       colors: ['#E91E63', '#FF9800', '#000000'],
-//       chart: {
-//         id: 'basic-bar',
-//         toolbar: {
-//           show: false, // Hide chart toolbar
-//         },
-//       },
-//       xaxis: {
-//         categories: historicalXData,
-//       },
-//       yaxis: {
-//         title: {
-//           text: 'Values',
-//         },
-//       },
-//       stroke: {
-//         width: 2, // Decrease the stroke width
-//         curve: 'smooth', // Use smooth curve
-//       },
-//       series: {
-//         curve: "cardinal", // Use a smooth curve to connect data points
-//       },
-//     },
-//     series: [
-//       {
-//         name: 'x-axes value',
-//         data: historicalXData,
-//       },
-//       {
-//         name: 'y-axes value',
-//         data: historicalYData,
-//       },
-//       {
-//         name: 'z-axes value',
-//         data: historicalZData,
-//       },
-//     ],
-//   });
-
-//   return (
-//     <div className="container mx-auto p-8 flex flex-col items-center md:flex-col md:justify-center">
-//       <div>
-//         <div className='container flex flex-row'>
-//       <div className="max-w-md mx-auto mr-7">
-//         <DataCard label="X" value={xdata} historicalData={historicalXData} />
-//       </div>
-//       <div className="max-w-md mx-auto mr-7">
-//         <DataCard label="Y" value={ydata} historicalData={historicalYData} />
-//       </div>
-//       <div className="max-w-md mx-auto">
-//         <DataCard label="Z" value={zdata} historicalData={historicalZData} />
-//       </div>
-//       </div>
-//       </div>
-//       <div className="col-4 mt-12">
-//         <h2 className='text-primary font-semibold text-3xl'>Seismograph</h2>
-//         <Chart options={state.options} series={state.series} type="line" width="600" height="300" />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default LiveData;
-
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons';
 import Chart from 'react-apexcharts';
 
-const DataCard = ({ label, value, historicalData }) => {
-  const [prevValue, setPrevValue] = useState(value);
+// ─── Constants ────────────────────────────────────────────────────────────────
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '/api';
+const POLL_INTERVAL_MS = 500;
+const MAX_HISTORY_POINTS = 60; // keep last 60 points on the chart
+const QUAKE_THRESHOLD = 3;
 
-  useEffect(() => {
-    // Set the previous value whenever the value changes
-    setPrevValue(value);
-  }, [value]);
-
-  const iconStyle = {
-    fontSize: '3rem',
-    transition: 'transform 0.5s ease',
-    transform: value > prevValue ? 'rotate(0deg)' : 'rotate(180deg)',
-  };
+// ─── DataCard ─────────────────────────────────────────────────────────────────
+const DataCard = ({ label, value, unit = '' }) => {
+  const prevRef = useRef(value);
+  const isRising = value >= prevRef.current;
+  useEffect(() => { prevRef.current = value; }, [value]);
 
   return (
-    <div className="w-52 mx-auto mt-4 bg-white border p-4 rounded-md shadow-md transition-transform transform scale-100 hover:scale-105">
-      <div className="flex items-center justify-center mb-4 text-primary">
-        <FontAwesomeIcon icon={faTachometerAlt} style={{ ...iconStyle, color: '#0492c2' }} />
+    <div className="flex-1 min-w-[160px] max-w-[220px] bg-white border border-gray-100 p-6 rounded-2xl shadow-md
+                    transition-all duration-300 hover:shadow-xl hover:-translate-y-1 text-center">
+      <div className="flex items-center justify-center mb-3 text-[#0492c2]">
+        <FontAwesomeIcon
+          icon={faTachometerAlt}
+          style={{
+            fontSize: '2.5rem',
+            transition: 'transform 0.4s ease',
+            transform: isRising ? 'rotate(0deg)' : 'rotate(180deg)',
+          }}
+        />
       </div>
-      <h3 className="text-lg font-semibold">{label} Value:</h3>
-      <div className="flex items-center mt-2">
-        <p className={`text-xl ${value > prevValue ? 'text-green-500' : 'text-red-500'}`}>
-          {value}
-        </p>
-      </div>
-      <div>{/* <p className="text-sm mt-2">Historical Data: {historicalData.join(', ')}</p> */}</div>
+      <h3 className="text-base font-semibold text-gray-600 mb-1">{label} Axis</h3>
+      <p className={`text-3xl font-bold transition-colors duration-300 ${isRising ? 'text-emerald-500' : 'text-red-500'}`}>
+        {typeof value === 'number' ? value.toFixed(3) : '—'}{unit}
+      </p>
     </div>
   );
 };
 
-const LiveData = () => {
-  const [xdata, setXData] = useState(0);
-  const [ydata, setYData] = useState(0);
-  const [zdata, setZData] = useState(0);
-
-  // Historical data arrays
-  const [historicalXData, setHistoricalXData] = useState([]);
-  const [historicalYData, setHistoricalYData] = useState([]);
-  const [historicalZData, setHistoricalZData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try{
-        // const response = await axios.get("http://192.168.190.132:5000");
-        const response = await axios.get("http://192.168.16.28:5000");
-        
-        console.log(response.data)
-        // const len=response.data.length;
-        // console.log(response.data[0].x)
-        // setXData(response.data[len-1].x);
-        // setYData(response.data[len-1].y);
-        // setZData(response.data[len-1].z);
-
-        setXData(response.data.x);
-        setYData(response.data.y);
-        setZData(response.data.z);
-
-        // Update historical data
-        // setHistoricalXData((prevData) => [...prevData, response.data[len-1].x]);
-        // setHistoricalYData((prevData) => [...prevData, response.data[len-1].y]);
-        // setHistoricalZData((prevData) => [...prevData, response.data[len-1].z]);
-
-  setHistoricalXData((prevData) => [...prevData, response.data.x]);
-        setHistoricalYData((prevData) => [...prevData, response.data.y]);
-        setHistoricalZData((prevData) => [...prevData, response.data.z]);
-
-        setState((prevState) => ({
-          ...prevState,
-          series: [
-            { name: "x-axes value", data: historicalXData },
-            { name: "y-axes value", data: historicalYData },
-            { name: "z-axes value", data: historicalZData },
-          ],
-        }));
-
-        const threshold = 3;
-      //   if (response.data[len-1].x > threshold || response.data[len-1].x < -threshold ||
-      //     response.data[len-1].y> threshold || response.data[len-1].y< -threshold ||
-      //     response.data[len-1].z> threshold || response.data[len-1].z < -threshold) {
-      //     alert('Earthquake Detected! Stay Safe!');
-      //   }
-          if (response.data.x > threshold || response.data.x < -threshold ||
-          response.data.y> threshold || response.data.y< -threshold ||
-          response.data.z> threshold || response.data.z < -threshold) {
-          alert('Earthquake Detected! Stay Safe!');
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    const fetchDummy= async () => {
-      try {
-        // const response = await axios.get('http://localhost:5000/scam');
-        const response = await axios.get('http://localhost:5000/test');
-        console.log('object')
-        console.log(response)
-        
-      
-      
-      if(response.data){
-          alert('Earthquake Detected! Stay Safe!');
-      }
-    
-      
-    }
-    
-   catch (error) {
-    console.error('Error fetching data:', error);
-  }
+// ─── EarthquakeAlert Banner ───────────────────────────────────────────────────
+const AlertBanner = ({ active }) => {
+  if (!active) return null;
+  return (
+    <div className="mb-8 flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 rounded-2xl px-6 py-4 animate-pulse">
+      <span className="text-2xl">⚠️</span>
+      <div>
+        <p className="font-bold text-lg">Earthquake Detected!</p>
+        <p className="text-sm font-medium">Sensor readings exceed safety threshold. Stay safe!</p>
+      </div>
+    </div>
+  );
 };
 
-    fetchData();
-    // fetchDummy();
+// ─── LiveData page ────────────────────────────────────────────────────────────
+const LiveData = () => {
+  const [latestData, setLatestData] = useState({ x: 0, y: 0, z: 9.81 });
+  const [quakeAlert, setQuakeAlert] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState('connecting'); // 'connecting' | 'live' | 'error'
 
-    // Simulating live data updates every 5 ms
-    const intervalId = setInterval(fetchData, 500);
+  // Use refs for history so the interval closure always sees up-to-date arrays
+  // without triggering infinite re-renders.
+  const histXRef = useRef([]);
+  const histYRef = useRef([]);
+  const histZRef = useRef([]);
+  const labelsRef = useRef([]);
 
-    // Cleanup the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  }, [historicalXData, historicalYData, historicalZData]);
+  // Dedicated chart state — updated only when we have new points
+  const [chartSeries, setChartSeries] = useState([
+    { name: 'X Axis', data: [] },
+    { name: 'Y Axis', data: [] },
+    { name: 'Z Axis', data: [] },
+  ]);
 
-  const [state, setState] = useState({
-    options: {
-      colors: ['#E91E63', '#FF9800', '#000000'],
-      chart: {
-        id: 'basic-bar',
-        toolbar: {
-          show: false, // Hide chart toolbar
-        },
-      },
-      xaxis: {
-        categories: historicalXData,
-      },
-      yaxis: {
-        title: {
-          text: 'Values',
-        },
-      },
-      stroke: {
-        width: 2, // Decrease the stroke width
-        curve: 'smooth', // Use smooth curve
-      },
-      series: {
-        curve: "cardinal", // Use a smooth curve to connect data points
-      },
+  const chartOptions = {
+    colors: ['#E91E63', '#FF9800', '#0492c2'],
+    chart: {
+      id: 'seismograph',
+      type: 'line',
+      animations: { enabled: true, easing: 'linear', dynamicAnimation: { speed: 400 } },
+      toolbar: { show: false },
+      zoom: { enabled: false },
     },
-    series: [
-      {
-        name: 'x-axes value',
-        data: historicalXData,
-      },
-      {
-        name: 'y-axes value',
-        data: historicalYData,
-      },
-      {
-        name: 'z-axes value',
-        data: historicalZData,
-      },
-    ],
-  });
+    stroke: { width: 2, curve: 'smooth' },
+    xaxis: {
+      type: 'datetime',
+      labels: { datetimeFormatter: { minute: 'HH:mm', second: 'HH:mm:ss' } },
+      title: { text: 'Time' },
+    },
+    yaxis: { title: { text: 'Acceleration (g)' }, decimalsInFloat: 3 },
+    legend: { position: 'top' },
+    tooltip: { x: { format: 'HH:mm:ss' } },
+    grid: { borderColor: '#e5e7eb' },
+  };
+
+  const fetchData = useCallback(async () => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/`);
+      const { x, y, z } = response.data;
+
+      setLatestData({ x, y, z });
+      setConnectionStatus('live');
+
+      // Check quake threshold
+      const isQuake =
+        Math.abs(x) > QUAKE_THRESHOLD ||
+        Math.abs(y) > QUAKE_THRESHOLD ||
+        Math.abs(z - 9.81) > QUAKE_THRESHOLD; // compare Z against gravity baseline
+      setQuakeAlert(isQuake);
+
+      // Append to refs (no re-render on change)
+      const now = new Date().getTime();
+      labelsRef.current = [...labelsRef.current, now].slice(-MAX_HISTORY_POINTS);
+      histXRef.current  = [...histXRef.current,  x].slice(-MAX_HISTORY_POINTS);
+      histYRef.current  = [...histYRef.current,  y].slice(-MAX_HISTORY_POINTS);
+      histZRef.current  = [...histZRef.current,  z].slice(-MAX_HISTORY_POINTS);
+
+      // Build [timestamp, value] pairs for ApexCharts datetime x-axis
+      const xSeries = labelsRef.current.map((t, i) => [t, histXRef.current[i]]);
+      const ySeries = labelsRef.current.map((t, i) => [t, histYRef.current[i]]);
+      const zSeries = labelsRef.current.map((t, i) => [t, histZRef.current[i]]);
+
+      setChartSeries([
+        { name: 'X Axis', data: xSeries },
+        { name: 'Y Axis', data: ySeries },
+        { name: 'Z Axis', data: zSeries },
+      ]);
+    } catch (error) {
+      console.error('Error fetching seismic data:', error);
+      setConnectionStatus('error');
+    }
+  }, []); // stable — no dependencies on state
+
+  useEffect(() => {
+    fetchData(); // initial fetch immediately
+    const intervalId = setInterval(fetchData, POLL_INTERVAL_MS);
+    return () => clearInterval(intervalId); // cleanup on unmount
+  }, [fetchData]); // only re-runs if fetchData changes (it won't)
 
   return (
-    <div className="container mx-auto p-8 flex flex-col items-center md:flex-col md:justify-center">
-      <div>
-        <div className='container flex flex-row'>
-      <div className="max-w-md mx-auto mr-7">
-        <DataCard label="X" value={xdata} historicalData={historicalXData} />
-      </div>
-      <div className="max-w-md mx-auto mr-7">
-        <DataCard label="Y" value={ydata} historicalData={historicalYData} />
-      </div>
-      <div className="max-w-md mx-auto">
-        <DataCard label="Z" value={zdata} historicalData={historicalZData} />
-      </div>
-      </div>
-      </div>
-      <div className="col-4 mt-12">
-        <h2 className='text-primary font-semibold text-3xl'>Seismograph</h2>
-        <Chart options={state.options} series={state.series} type="line" width="600" height="300" />
+    <div className="px-6 py-16 bg-white min-h-screen">
+      <div className="max-w-7xl mx-auto">
+
+        {/* Header */}
+        <div className="flex items-center justify-between mb-10 flex-wrap gap-4">
+          <h1 className="text-3xl font-bold text-[#0492c2]">Live Sensor Data</h1>
+          <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium
+            ${connectionStatus === 'live'
+              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+              : connectionStatus === 'error'
+              ? 'bg-red-50 text-red-700 border border-red-200'
+              : 'bg-yellow-50 text-yellow-700 border border-yellow-200'}`}>
+            <span className={`w-2 h-2 rounded-full ${
+              connectionStatus === 'live' ? 'bg-emerald-500 animate-pulse'
+              : connectionStatus === 'error' ? 'bg-red-500'
+              : 'bg-yellow-500 animate-pulse'}`} />
+            {connectionStatus === 'live' ? 'Live' : connectionStatus === 'error' ? 'Backend Offline' : 'Connecting…'}
+          </span>
+        </div>
+
+        {/* Earthquake Alert Banner */}
+        <AlertBanner active={quakeAlert} />
+
+        {/* Data Cards */}
+        <div className="flex flex-wrap justify-center gap-6 mb-12">
+          <DataCard label="X" value={latestData.x} />
+          <DataCard label="Y" value={latestData.y} />
+          <DataCard label="Z" value={latestData.z} unit=" g" />
+        </div>
+
+        {/* Seismograph Chart */}
+        <div className="bg-gray-50 rounded-2xl shadow-md p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-[#0492c2]">Seismograph</h2>
+            <span className="text-xs text-gray-400">Last {MAX_HISTORY_POINTS} readings · polling every {POLL_INTERVAL_MS}ms</span>
+          </div>
+          {chartSeries[0].data.length === 0 ? (
+            <div className="flex items-center justify-center h-64 text-gray-400 text-sm">
+              {connectionStatus === 'error'
+                ? '⚠️ Cannot connect to backend at ' + BACKEND_URL
+                : '⏳ Waiting for data…'}
+            </div>
+          ) : (
+            <Chart
+              options={chartOptions}
+              series={chartSeries}
+              type="line"
+              height={320}
+              width="100%"
+            />
+          )}
+        </div>
+
+        {/* Backend info */}
+        {connectionStatus === 'error' && (
+          <div className="mt-6 bg-red-50 border border-red-200 rounded-2xl p-5 text-sm text-red-700">
+            <p className="font-semibold mb-1">Backend not reachable</p>
+            <p>Make sure the backend server is running:</p>
+            <pre className="mt-2 bg-red-100 rounded-lg p-3 text-xs overflow-auto">cd backend{'\n'}node app.js</pre>
+            <p className="mt-2">Expected backend URL: <code className="font-mono">{BACKEND_URL}</code></p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,0 +1,128 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 DONE 0.0s
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.70kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:18-alpine
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/nginx:1.25-alpine
+#3 DONE 0.5s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 91B done
+#4 DONE 0.0s
+
+#5 [builder 1/6] FROM docker.io/library/node:18-alpine
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 1.94kB done
+#6 DONE 0.0s
+
+#7 [builder 2/6] WORKDIR /app
+#7 CACHED
+
+#8 [builder 3/6] COPY package.json package-lock.json ./
+#8 CACHED
+
+#9 [production 1/4] FROM docker.io/library/nginx:1.25-alpine@sha256:516475cc129da42866742567714ddc681e5eed7b9ee0b9e9c015e464b4221a00
+#9 resolve docker.io/library/nginx:1.25-alpine@sha256:516475cc129da42866742567714ddc681e5eed7b9ee0b9e9c015e464b4221a00 0.0s done
+#9 sha256:501d84f5d06487ff81e506134dc922ed4fd2080d5521eb5b6ee4054fa17d15c4 10.80kB / 10.80kB done
+#9 sha256:e6ef242c157026935bf8a69e6cf19f8f6635e44507c813daf0cc644f2e22396b 0B / 629B 0.1s
+#9 sha256:516475cc129da42866742567714ddc681e5eed7b9ee0b9e9c015e464b4221a00 9.07kB / 9.07kB done
+#9 sha256:721fa00bc549df26b3e67cc558ff176112d4ba69847537766f3c28e171d180e7 2.50kB / 2.50kB done
+#9 sha256:4abcf20661432fb2d719aaf90656f55c287f8ca915dc1c92ec14ff61e67fbaf8 0B / 3.41MB 0.1s
+#9 sha256:fc21a1d387f514f53589abea6d67cd6b329dfd3c9059bc96a552af3b3c97b413 0B / 3.99MB 0.1s
+#9 sha256:e6ef242c157026935bf8a69e6cf19f8f6635e44507c813daf0cc644f2e22396b 629B / 629B 1.4s done
+#9 sha256:13fcfbc94648785b918ecc1af675ac5187cdfc30f4fdaf9afa8bd2e9dedf548b 0B / 954B 1.4s
+#9 sha256:4abcf20661432fb2d719aaf90656f55c287f8ca915dc1c92ec14ff61e67fbaf8 1.05MB / 3.41MB 2.1s
+#9 sha256:13fcfbc94648785b918ecc1af675ac5187cdfc30f4fdaf9afa8bd2e9dedf548b 954B / 954B 2.6s done
+#9 sha256:d4bca490e609acaaf54ca73363442d31a31fd136a47a20a12370cf2025f0a10b 0B / 393B 2.8s
+#9 sha256:d4bca490e609acaaf54ca73363442d31a31fd136a47a20a12370cf2025f0a10b 393B / 393B 4.0s done
+#9 sha256:5406ed7b06d9a94b5bd15843d2a1c7e38796a3ec5dc7f40f16f70cc1d045f453 0B / 1.21kB 4.1s
+#9 sha256:fc21a1d387f514f53589abea6d67cd6b329dfd3c9059bc96a552af3b3c97b413 1.05MB / 3.99MB 4.3s
+#9 sha256:4abcf20661432fb2d719aaf90656f55c287f8ca915dc1c92ec14ff61e67fbaf8 2.10MB / 3.41MB 4.5s
+#9 sha256:5406ed7b06d9a94b5bd15843d2a1c7e38796a3ec5dc7f40f16f70cc1d045f453 1.21kB / 1.21kB 5.3s done
+#9 sha256:8a3742a9529dc5c00974dfcf5e465be9f1606ff8a1911527b3928cf86ad57465 0B / 1.40kB 5.4s
+#9 sha256:4abcf20661432fb2d719aaf90656f55c287f8ca915dc1c92ec14ff61e67fbaf8 3.15MB / 3.41MB 6.1s
+#9 extracting sha256:4abcf20661432fb2d719aaf90656f55c287f8ca915dc1c92ec14ff61e67fbaf8
+#9 sha256:4abcf20661432fb2d719aaf90656f55c287f8ca915dc1c92ec14ff61e67fbaf8 3.41MB / 3.41MB 6.3s done
+#9 sha256:8a3742a9529dc5c00974dfcf5e465be9f1606ff8a1911527b3928cf86ad57465 1.40kB / 1.40kB 6.4s done
+#9 extracting sha256:4abcf20661432fb2d719aaf90656f55c287f8ca915dc1c92ec14ff61e67fbaf8 0.1s done
+#9 sha256:0d0c16747d2c6b6c26c064652afcb964c15f1b1e596ec052b2aa19b83948ae27 0B / 13.04MB 6.4s
+#9 sha256:fc21a1d387f514f53589abea6d67cd6b329dfd3c9059bc96a552af3b3c97b413 2.10MB / 3.99MB 6.8s
+#9 sha256:fc21a1d387f514f53589abea6d67cd6b329dfd3c9059bc96a552af3b3c97b413 3.15MB / 3.99MB 7.5s
+#9 sha256:fc21a1d387f514f53589abea6d67cd6b329dfd3c9059bc96a552af3b3c97b413 3.99MB / 3.99MB 7.8s done
+#9 extracting sha256:fc21a1d387f514f53589abea6d67cd6b329dfd3c9059bc96a552af3b3c97b413
+#9 ...
+
+#10 [builder 4/6] RUN npm ci
+#10 7.762 npm error code EUSAGE
+#10 7.762 npm error
+#10 7.762 npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with `npm install` before continuing.
+#10 7.762 npm error
+#10 7.762 npm error Missing: @testing-library/dom@10.4.1 from lock file
+#10 7.762 npm error Invalid: lock file's picocolors@1.0.0 does not satisfy picocolors@1.1.1
+#10 7.762 npm error Missing: apexcharts@3.54.1 from lock file
+#10 7.762 npm error Missing: @yr/monotone-cubic-spline@1.0.3 from lock file
+#10 7.762 npm error Missing: svg.draggable.js@2.2.2 from lock file
+#10 7.762 npm error Missing: svg.easing.js@2.0.0 from lock file
+#10 7.762 npm error Missing: svg.filter.js@2.0.2 from lock file
+#10 7.762 npm error Missing: svg.pathmorphing.js@0.1.3 from lock file
+#10 7.762 npm error Missing: svg.resize.js@1.4.3 from lock file
+#10 7.762 npm error Missing: svg.select.js@3.0.1 from lock file
+#10 7.762 npm error Missing: typescript@4.9.5 from lock file
+#10 7.762 npm error Missing: svg.js@2.7.1 from lock file
+#10 7.762 npm error Missing: svg.select.js@2.1.2 from lock file
+#10 7.762 npm error
+#10 7.762 npm error Clean install a project
+#10 7.762 npm error
+#10 7.762 npm error Usage:
+#10 7.762 npm error npm ci
+#10 7.762 npm error
+#10 7.762 npm error Options:
+#10 7.762 npm error [--install-strategy <hoisted|nested|shallow|linked>] [--legacy-bundling]
+#10 7.762 npm error [--global-style] [--omit <dev|optional|peer> [--omit <dev|optional|peer> ...]]
+#10 7.762 npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+#10 7.762 npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]
+#10 7.762 npm error [--no-bin-links] [--no-fund] [--dry-run]
+#10 7.762 npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+#10 7.762 npm error [-ws|--workspaces] [--include-workspace-root] [--install-links]
+#10 7.762 npm error
+#10 7.762 npm error aliases: clean-install, ic, install-clean, isntall-clean
+#10 7.762 npm error
+#10 7.762 npm error Run "npm help ci" for more info
+#10 7.765 npm notice
+#10 7.765 npm notice New major version of npm available! 10.8.2 -> 11.12.1
+#10 7.765 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+#10 7.765 npm notice To update run: npm install -g npm@11.12.1
+#10 7.765 npm notice
+#10 7.765 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-03-28T13_31_38_543Z-debug-0.log
+#10 ERROR: process "/bin/sh -c npm ci" did not complete successfully: exit code: 1
+------
+ > [builder 4/6] RUN npm ci:
+7.762 npm error
+7.762 npm error aliases: clean-install, ic, install-clean, isntall-clean
+7.762 npm error
+7.762 npm error Run "npm help ci" for more info
+7.765 npm notice
+7.765 npm notice New major version of npm available! 10.8.2 -> 11.12.1
+7.765 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+7.765 npm notice To update run: npm install -g npm@11.12.1
+7.765 npm notice
+7.765 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-03-28T13_31_38_543Z-debug-0.log
+------
+Dockerfile:10
+--------------------
+   8 |     
+   9 |     # Install all dependencies (including devDependencies needed for the build)
+  10 | >>> RUN npm ci
+  11 |     
+  12 |     # Copy the rest of the source
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c npm ci" did not complete successfully: exit code: 1

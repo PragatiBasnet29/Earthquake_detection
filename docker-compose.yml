@@ -1,0 +1,78 @@
+version: '3.8'
+
+# ─── Networks ─────────────────────────────────────────────────────────────────
+networks:
+  earthquake_net:
+    driver: bridge
+
+# ─── Services ─────────────────────────────────────────────────────────────────
+services:
+
+  # ── 1. Backend (Express + MongoDB) ─────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: earthquake_backend
+    restart: unless-stopped
+    networks:
+      - earthquake_net
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/earthquake_db
+    env_file:
+      - ./backend/.env
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+  # ── 2. Frontend (React + Nginx Proxy) ───────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: earthquake_frontend
+    restart: unless-stopped
+    networks:
+      - earthquake_net
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  # ── 3. MongoDB (Persistence Layer) ─────────────────────────────────────────
+  mongodb:
+    image: mongo:6.0
+    container_name: earthquake_mongo
+    restart: unless-stopped
+    networks:
+      - earthquake_net
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── 4. Hardware Simulator ───────────────────────────────────────────────────
+  hardware:
+    build:
+      context: ./earthquake_and_detection_hardware
+      dockerfile: Dockerfile
+    container_name: earthquake_hardware_sim
+    restart: unless-stopped
+    networks:
+      - earthquake_net
+    depends_on:
+      - backend
+    environment:
+      - BACKEND_URL=http://backend:8000
+      - INTERVAL_SEC=0.5
+      - QUAKE_PROB=0.005
+
+volumes:
+  mongo_data:

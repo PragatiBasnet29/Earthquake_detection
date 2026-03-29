@@ -1,39 +1,40 @@
 // HeroSection.js
 import React from 'react';
-import IllustrationImage from '../assets/svgs/earthquake.svg'; // Replace with the actual path
+import IllustrationImage from '../assets/svgs/earthquake.svg';
 import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
   return (
-    <div className=" text-primary py-16">
-      <div className="container mx-auto flex flex-col md:flex-row items-center">
-        {/* Illustration (on the right for larger screens) */}
-    
-        {/* <IllustrationImage/> */}
+    <div className="bg-gradient-to-br from-sky-50 to-white py-20 px-6">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
 
-        {/* Text content (on the left) */}
-        <div className="md:w-1/2 lg:w-1/3 xl:w-1/2 mx-4 md:mx-8 lg:mx-12">
-          {/* Heading */}
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-10">Navigating Earthquakes: A Guide to Safety and Preparedness</h1>
-          
-          {/* Subheading */}
-          <p className="text-lg md:text-xl lg:text-2xl mb-10 ">
-          Stay Informed, Stay Safe: The Ultimate Preparedness Companion
+        {/* Text content */}
+        <div className="flex-1 space-y-6">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
+            Navigating Earthquakes:<br/>
+            <span className="text-[#0492c2]">A Guide to Safety</span> and Preparedness
+          </h1>
+
+          <p className="text-lg md:text-xl text-gray-500 leading-relaxed max-w-lg">
+            Stay Informed, Stay Safe: The Ultimate Preparedness Companion
           </p>
-          
-        
-          {/* CTA Button */}
-          <Link to="/" className="bg-primary text-slate-200 py-4 px-8 rounded-full font-bold text-lg hover:bg-gray-200 hover:text-primary transition duration-300">
-            See More
+
+          <Link
+            to="/live-data"
+            className="inline-block bg-[#0492c2] text-white py-3 px-8 rounded-full font-semibold text-base shadow-md hover:bg-[#037aaf] hover:shadow-lg transition-all duration-300"
+          >
+            View Live Data
           </Link>
-        
         </div>
 
-        <img
-          src={IllustrationImage}
-          alt="Illustration"
-          className="w-full md:w-1/2 lg:w-2/3 xl:w-1/2 mb-8 md:mb-0"
-        />
+        {/* Illustration */}
+        <div className="flex-1 flex justify-center w-full">
+          <img
+            src={IllustrationImage}
+            alt="Earthquake Illustration"
+            className="w-full max-w-sm md:max-w-md drop-shadow-xl"
+          />
+        </div>
       </div>
     </div>
   );
