@@ -1,7 +1,7 @@
 // Footer.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaTwitter, FaLinkedin, FaEnvelope } from 'react-icons/fa';
+import { FaLinkedin, FaEnvelope } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 import logo from "../assets/images/logo-01.png"
 
