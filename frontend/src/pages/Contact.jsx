@@ -3,6 +3,8 @@ import axios from 'axios';
 import { FaEnvelope, FaLinkedin } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://earthquake-backend-kjon.onrender.com';
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -23,7 +25,7 @@ const Contact = () => {
     setStatus({ type: 'loading', message: 'Sending your message...' });
 
     try {
-      const response = await axios.post('/api/contact', formData);
+      const response = await axios.post(`${BACKEND_URL}/contact`, formData);
       if (response.data.success) {
         setStatus({ type: 'success', message: 'Message sent successfully! We will get back to you soon.' });
         setFormData({ name: '', email: '', message: '' });
