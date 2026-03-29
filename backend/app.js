@@ -142,7 +142,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-app.post("/api/contact", async (req, res) => {
+app.post("/contact", async (req, res) => {
   const { name, email, message } = req.body;
   if (!name || !email || !message) {
     return res.status(400).json({ error: "Please provide name, email, and message." });
